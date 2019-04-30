@@ -6,12 +6,15 @@ using std::cout;
 using std::endl;
 using std:: string;
 
+namespace 
+{
 enum
 {
     num_A = 1,
     num_B,
     equal
 };
+}
 
 static int compare(const string &A, const string &B)
 {
@@ -43,8 +46,7 @@ static bool StrToInt(const string &str, int *mass, size_t size)
       }
   for(size_t i = 0; i < size; ++i)
      {
-       char buf = str[i];
-       mass[((size - 1) - i)] = buf - '0';
+       mass[((size - 1) - i)] = str[i] - '0';
      }
   return true;
 }
@@ -127,9 +129,9 @@ static string sum (const string &Number_A, const string &Number_B)
     size_t size_B = Number_B.length();
     size_t size_Result;
 
-    size_Result = (size_A > size_B) ? size_A + 1 : size_B + 1;
-
-    int *A_mass = new int[size_Result - 1]{};
+    size_Result = (size_A > size_B) ? size_A + 1 : size_B + 1; // reserve 1 digit if result
+                                                               // is bigger than biggest operand
+    int *A_mass = new int[size_Result - 1]{};// create arrays with size of the biggest operand
     int *B_mass = new int[size_Result - 1]{};
 
      if(!(StrToInt(Number_A,A_mass,size_A) &&
@@ -163,6 +165,10 @@ static string sum (const string &Number_A, const string &Number_B)
 
 static string multiply (const string &Number_A, const string &Number_B)
 {
+     if((Number_A == "0") || (Number_B == "0"))
+       {
+         return "0";
+       }
      size_t size_A = Number_A.length();
      size_t size_B = Number_B.length();
      int *A_mass = new int[size_A]{};
@@ -280,11 +286,6 @@ int main()
 
    else if(operation == '*')
      {
-       if((Number_A == "0") || (Number_B == "0"))
-       {
-            cout<< "Result> 0" << endl;
-            return 0;
-       }
        cout<< "Result> " << multiply(Number_A, Number_B) << endl;
      }
 
